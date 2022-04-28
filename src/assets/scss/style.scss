@@ -1,0 +1,250 @@
+@import "mixins";
+@import "custom";
+@import "variables";
+@import "~bootstrap/scss/bootstrap";
+
+body {
+	padding: 0;
+	margin: 0;
+}
+
+#app {
+	font-family: $PT;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-align: center;
+	//color: #2c3e50;
+	background-color: #869E9B;
+	font-size: calc(0.723vw + 0.0073px);
+	//height: 100vh;
+
+	@media (min-width: 1920px) {
+		font-size: 14px;
+	}
+}
+
+.container {
+	display: grid;
+	grid-template-columns: 1.2fr 1.2fr;
+	//grid-template-rows: 1fr 1fr 1fr;
+	gap: 0 0;
+	grid-template-areas:
+    ". ."
+    ". ."
+    ". .";
+}
+
+.main-left {
+	border-right: 0.07em $light-green dashed;
+	border-bottom: 0.07em $light-green dashed;
+}
+
+.main-right {
+	border-bottom: 0.07em $light-green dashed;
+}
+
+.header {
+	&__info {
+		margin-top: 3em;
+		margin-bottom: 6em;
+	}
+	&__title {
+		@include regular-font;
+		text-align: left;
+	}
+	&__links {
+		text-align: left;
+		a {
+			@include regular-font;
+			@include link;
+		}
+	}
+}
+
+.stack {
+	margin-bottom: 7.45em;
+	.info {
+		&__title {
+			margin-bottom: 1.5em;
+
+			h1 {
+				@include bold-font;
+			}
+		}
+
+		&__technologies {
+			@include regular-font;
+			letter-spacing: .02em;
+			text-align: left;
+			p {
+				display: inline-block;
+				margin-right: 0.3em;
+			}
+			span {
+				color: $light-green;
+			}
+		}
+	}
+}
+
+.project {
+	margin-bottom: 11.5em;
+	overflow: hidden;
+	&:last-child {
+
+	}
+
+	&__left {
+		padding-right: 0;
+		//padding-right: 0.08em;
+		margin-bottom: 0.14em;
+	}
+
+	&__right {
+		width: 49%;
+		padding-left: 0.07em;
+		padding-right: 0;
+	}
+
+	&__website {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+
+		padding: 1.45em 1.3em;
+		border-radius: 0.25em;
+		background-color: $light-green;
+
+		height: 100%;
+		min-height: 17.28em;
+		&-title {
+			@include title-font;
+		}
+		&-description {
+			@include regular-font;
+			text-align: left;
+		}
+	}
+
+	&__stack {
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+		flex-wrap: wrap;
+		&-img {
+			position: relative;
+			display: inline-block;
+			width: 49.6%;
+			margin-bottom: 0.14em;
+
+			&:nth-child(odd) {
+				margin-right: 0.145em;
+			}
+			&:nth-last-child(-n+2){
+				margin-bottom: 0.14em;
+			}
+
+			svg {
+				path {
+					fill: $light-green;
+					&:hover {
+
+					}
+				}
+			}
+		}
+
+		&-text {
+			@include regular-font;
+			position: absolute;
+
+			top: 40%;
+			right: 0;
+			bottom: 0;
+			left: 0;
+
+		}
+
+	}
+
+	&:hover {
+		cursor: pointer;
+		.project__website {
+			background-color: $yellow;
+			transition: all $transition;
+		}
+		.project__stack-img path {
+			transition: all $transition;
+		}
+		.form-html path {
+			fill: #F9C4AD;
+		}
+		.form-pug path {
+			fill: #EFCCA3;
+		}
+		.form-css path {
+			fill: #FFCACA;
+		}
+		.form-scss path {
+			fill: #FFC2E1;
+		}
+		.form-bootstrap path {
+			fill: #CFB9FF;
+		}
+		.form-javascript path {
+			fill: #FFF6AD;
+		}
+		.form-jquery path {
+			fill: #C9E7FF;
+		}
+		.form-vue path {
+			fill: #97E5C3;
+		}
+		.form-react path {
+			fill: #39D2FB;
+		}
+		.form-typescript path {
+			fill: #A1DAFF;
+		}
+		.form-tilda path {
+			//fill: #fa8669;
+			fill: #f8a692;
+		}
+		.form-desktop path {
+			fill: #EADDD0;
+		}
+		.form-mobile path {
+			fill: #D7FFDD;
+		}
+
+
+
+
+
+	}
+}
+
+.footer {
+	&__img {
+		img {
+			width: 100%;
+		}
+	}
+	.info {
+		&__title {
+			margin-bottom: 11.5em;
+
+			h1 {
+				@include bold-font;
+			}
+		}
+
+		&__description {
+			@include regular-font;
+			text-align: left;
+			a {
+				@include link;
+			}
+		}
+	}
+}

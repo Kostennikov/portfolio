@@ -1,0 +1,64 @@
+@mixin regular-font {
+	font-size: 1.43em;
+	font-weight: 400;
+	line-height: 1;
+	letter-spacing: 0;
+	color: #242424;
+	text-align: center;
+}
+
+@mixin title-font {
+	font-size: 2.14em;
+	font-weight: 700;
+	line-height: 1.1;
+	letter-spacing: 0;
+	color: #242424;
+	text-align: left;
+}
+
+@mixin bold-font {
+	font-size: 3.93em;
+	font-weight: 700;
+	line-height: 1.1;
+	letter-spacing: 0;
+	color: #242424;
+	text-align: left;
+
+}
+
+@mixin link {
+	text-decoration: none;
+	list-style: none;
+	cursor: pointer;
+	text-align: left;
+	color: #242424;
+	&:hover {
+		color: $yellow;
+		transition: $transition;
+	}
+}
+
+$path: './assets/fonts/';
+
+$PT: "PT",
+Helvetica,
+Arial,
+sans-serif;
+
+@mixin fontFacePT($name, $src, $weight, $style) {
+	$source: $path+$src;
+
+	@font-face {
+		font-family: $name;
+		src: url($source + '.woff2') format('woff2'),
+		url($source + '.woff') format('woff'),
+		url($source + '.ttf') format('truetype');
+		font-weight: $weight;
+		font-style: $style;
+	}
+}
+
+@include fontFacePT('PT', 'PT-Light', 300, normal);
+@include fontFacePT('PT', 'PT-Regular', 400, normal);
+@include fontFacePT('PT', 'PT-Medium', 500, normal);
+@include fontFacePT('PT', 'PT-Bold', 700, normal);

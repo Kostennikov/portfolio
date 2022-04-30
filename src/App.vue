@@ -1,5 +1,6 @@
 <template>
-	<div class="container">
+	<div class="page">
+		<div class="container">
 		<div class="main-left">
 			<header class="header">
 				<div class="row">
@@ -57,8 +58,7 @@
 						</div>
 					</div>
 				</section>
-
-				<section class="project" v-for="(project, index) in leftProjects" :key="index">
+				<section class="project" @click="add" v-for="(project, index) in left" :key="index">
 					<div class="row">
 						<div class="col-sm-4 offset-sm-0 col-md-4 offset-md-1 project__left">
 							<div class="project__website">
@@ -74,13 +74,41 @@
 							<div class="project__stack">
 								<div class="project__stack-img" v-for="(technology, index) in project.technologies" :key="index">
 									<div :class="'form-' +`${technology.name.toLowerCase()}`" v-html="technology.svg"></div>
-
 									<div class="project__stack-text">
 										<p>{{ technology.name }}</p>
 									</div>
 								</div>
 							</div>
 						</div>
+					</div>
+					<div class="popper" v-if="popover">
+
+						<div class="popper__left" @click.stop="clickOutside">
+
+						</div>
+						<div class="popper__right" @click.stop="clickInside">
+							<div class="header">
+								<div class="header__info" :class="{'header__popover': popover === true, }">
+									<div class="header__links">
+										<div class="row">
+											<div class="col-sm-7 offset-sm-0 col-md-7 offset-md-1">
+												<a href="#">kostennikov.ru</a>
+											</div>
+
+											<div class="col-sm-2 offset-sm-0 col-md-2 offset-md-1 header__close">
+												<p class="header__button" @click.stop="close" @mouseover.stop="mouseOver" v-if="!over">[ххххххх]</p>
+												<p class="header__button-over" @click.stop="close" @mouseleave="mouseLeave" v-if="over">[закрыть]</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="main">
+								<img src="./assets/img/ava.png" alt="">
+
+							</div>
+						</div>
+
 					</div>
 				</section>
 			</main>
@@ -161,19 +189,173 @@
 		</div>
 
 	</div>
+	</div>
 </template>
 
 <script>
+
 export default {
 	name: "App",
 
 	data() {
 		return {
+			left: [
+				{
+					title: 'Сайт Ярослава Туголуковского',
+					description: 'Сайт для души',
+					date: '2021-2022',
+					technologies: [
+						{
+							svg: this.html,
+							name: 'HTML'
+						},
+						{
+							svg: this.scss,
+							name: 'CSS'
+						},
+						{
+							svg: this.jquery,
+							name: 'JQuery'
+						},
+						{
+							svg: this.bootstrap,
+							name: 'Bootstrap'
+						},
+						{
+							svg: this.desktop,
+							name: 'Desktop'
+						},
+						{
+							svg: this.mobile,
+							name: 'Mobile'
+						},
+					]
+				},
+				{
+					title: 'Колорлон',
+					description: 'Сайт для бабла',
+					date: '2021',
+					technologies: [
+						{
+							svg: this.pug,
+							name: 'Pug'
+						},
+						{
+							svg: this.scss,
+							name: 'SCSS'
+						},
+						{
+							svg: this.js,
+							name: 'JavaScript'
+						},
+						{
+							svg: this.desktop,
+							name: 'Desktop'
+						},
+					]
+				},
+				{
+					title: 'Acer',
+					description: 'Сайт для бабла',
+					date: '2021',
+					technologies: [
+						{
+							svg: this.pug,
+							name: 'Pug'
+						},
+						{
+							svg: this.scss,
+							name: 'SCSS'
+						},
+						{
+							svg: this.js,
+							name: 'JavaScript'
+						},
+						{
+							svg: this.desktop,
+							name: 'Desktop'
+						},
+						{
+							svg: this.mobile,
+							name: 'Mobile'
+						},
+					]
+				},
+				{
+					title: 'Madeleine',
+					description: 'Сайт для бабла',
+					date: '2021',
+					technologies: [
+						{
+							svg: this.pug,
+							name: 'Pug'
+						},
+						{
+							svg: this.scss,
+							name: 'SCSS'
+						},
+						{
+							svg: this.jquery,
+							name: 'JQuery'
+						},
+						{
+							svg: this.desktop,
+							name: 'Desktop'
+						},
+						{
+							svg: this.mobile,
+							name: 'Mobile'
+						},
+					]
+				},
+				{
+					title: 'Fonar.tv',
+					description: 'Сайт для бабла',
+					date: '2020-2022',
+					technologies: [
+						{
+							svg: this.html,
+							name: 'HTML'
+						},
+						{
+							svg: this.scss,
+							name: 'SCSS'
+						},
+						{
+							svg: this.desktop,
+							name: 'Desktop'
+						},
+						{
+							svg: this.mobile,
+							name: 'Mobile'
+						},
+					]
+				},
+				{
+					title: 'CRM Sijeko',
+					description: 'Сайт для бабла',
+					date: '2020',
+					technologies: [
+						{
+							svg: this.vue,
+							name: 'Vue'
+						},
+					]
+				},
+			],
+			popover: false,
+			over: false,
+			leave: false,
+
 			leftProjects: [],
 			rightProjects: [],
 			html: `<svg width="100%" height="100%" viewBox="0 0 209 120" fill="none" xmlns="http://www.w3.org/2000/svg">\n' +
 							'\t\t\t\t\t\t\t\t\t\t<path d="M17.7274 5.47018C18.3865 3.50313 18.7161 2.5196 19.3273 1.79245C19.8671 1.15034 20.5603 0.653305 21.3433 0.346938C22.23 0 23.2722 0 25.3564 0H183.644C185.728 0 186.77 0 187.657 0.346938C188.44 0.653305 189.133 1.15034 189.673 1.79245C190.284 2.5196 190.613 3.50313 191.273 5.47018L207.848 54.9404C208.477 56.8176 208.792 57.7563 208.917 58.7165C209.028 59.5686 209.028 60.4314 208.917 61.2835C208.792 62.2437 208.477 63.1824 207.848 65.0596L191.273 114.53C190.613 116.497 190.284 117.48 189.673 118.208C189.133 118.85 188.44 119.347 187.657 119.653C186.77 120 185.728 120 183.644 120H25.3564C23.2722 120 22.23 120 21.3433 119.653C20.5603 119.347 19.8671 118.85 19.3273 118.208C18.7161 117.48 18.3865 116.497 17.7274 114.53L1.15158 65.0596C0.522563 63.1824 0.208053 62.2437 0.0831348 61.2835C-0.0277116 60.4314 -0.0277116 59.5686 0.0831348 58.7165C0.208053 57.7563 0.522563 56.8176 1.15158 54.9404L17.7274 5.47018Z" fill="#F9C4AD"/>\n' +
 							'\t\t\t\t\t\t\t\t\t</svg>`,
+			htmlStroke: `<svg width="209" height="120" viewBox="0 0 209 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M18.6756 5.78788C19.3619 3.73989 19.6335 2.98235 20.0928 2.43592C20.5248 1.92206 21.0799 1.52381 21.7077 1.27819C22.3761 1.01666 23.1872 1 25.3564 1H183.644C185.813 1 186.624 1.01666 187.292 1.27819C187.92 1.52381 188.475 1.92206 188.907 2.43593C189.367 2.98235 189.638 3.73989 190.324 5.78788L206.9 55.2581C207.541 57.1716 207.816 58.004 207.925 58.8456C208.025 59.612 208.025 60.388 207.925 61.1545C207.816 61.996 207.541 62.8284 206.9 64.7419L190.324 114.212C189.638 116.26 189.367 117.018 188.907 117.564C188.475 118.078 187.92 118.476 187.292 118.722C186.624 118.983 185.813 119 183.644 119H25.3564C23.1872 119 22.3761 118.983 21.7077 118.722C21.0799 118.476 20.5248 118.078 20.0928 117.564C19.6335 117.018 19.3619 116.26 18.6756 114.212L2.09977 64.7419C1.45861 62.8284 1.18425 61.996 1.07478 61.1544C0.975074 60.388 0.975074 59.612 1.07478 58.8456C1.18425 58.004 1.45861 57.1716 2.09977 55.2581L18.6756 5.78788Z" stroke="#AEC1BF" stroke-width="2"/>
+<path d="M79.9574 53H81.8374V58.94H89.0774V53H90.9574V67H89.0774V60.66H81.8374V67H79.9574V53ZM97.4166 54.72H92.9566V53H103.757V54.72H99.2966V67H97.4166V54.72ZM105.758 53H108.558L112.298 61.24H112.338L116.078 53H118.758V67H116.878V55.2H116.838L113.258 63.1H111.258L107.678 55.2H107.638V67H105.758V53ZM121.95 53H123.83V65.28H130.25V67H121.95V53Z" fill="#AEC1BF"/>
+</svg>`,
 			css: `<svg width="100%" height="100%" viewBox="0 0 209 120" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path fill-rule="evenodd" clip-rule="evenodd" d="M185.059 2.34315C183.559 0.842857 181.524 0 179.402 0H5C2.23858 0 0 2.23858 0 5V115C0 117.761 2.23858 120 5 120H204C206.761 120 209 117.761 209 115V29.5979C209 27.4762 208.157 25.4414 206.657 23.9411L185.059 2.34315Z" fill="#FFCACA"/>
 </svg>`,
@@ -210,296 +392,479 @@ export default {
 			mobile: `<svg width="100%" height="100%" viewBox="0 0 209 120" fill="none" xmlns="http://www.w3.org/2000/svg">
 \t\t\t\t\t\t\t\t\t\t<path fill-rule="evenodd" clip-rule="evenodd" d="M2.72484 13.6502C0 18.998 0 25.9987 0 40V80C0 94.0013 0 101.002 2.72484 106.35C5.12167 111.054 8.94619 114.878 13.6502 117.275C18.998 120 25.9987 120 40 120H169C183.001 120 190.002 120 195.35 117.275C200.054 114.878 203.878 111.054 206.275 106.35C209 101.002 209 94.0013 209 80V40C209 25.9987 209 18.998 206.275 13.6502C203.878 8.94619 200.054 5.12167 195.35 2.72484C190.002 0 183.001 0 169 0H40C25.9987 0 18.998 0 13.6502 2.72484C8.94619 5.12167 5.12167 8.94619 2.72484 13.6502ZM198 63C199.657 63 201 61.6569 201 60C201 58.3431 199.657 57 198 57C196.343 57 195 58.3431 195 60C195 61.6569 196.343 63 198 63Z" fill="#D7FFDD"/>
 \t\t\t\t\t\t\t\t\t</svg>`,
+
+
+
+			right: [
+				{
+					title: "1С-Просто",
+					description: "Сайт для бабла",
+					date: "2021—2022",
+					technologies: [
+						{
+							svg: this.html,
+							name: 'HTML'
+						},
+						{
+							svg: this.scss,
+							name: 'CSS'
+						},
+						{
+							svg: this.jquery,
+							name: 'JQuery'
+						},
+						{
+							svg: this.bootstrap,
+							name: 'Bootstrap'
+						},
+						{
+							svg: this.desktop,
+							name: 'Desktop'
+						},
+						{
+							svg: this.mobile,
+							name: 'Mobile'
+						},
+					]
+				},
+				{
+					title: "Ilona Lunden",
+					description: "Сайт для бабла",
+					date: "2021—2022",
+					technologies: [
+						{
+							svg: this.vue,
+							name: 'Vue'
+						},
+						{
+							svg: this.pug,
+							name: 'Pug'
+						},
+						{
+							svg: this.scss,
+							name: 'SCSS'
+						},
+						{
+							svg: this.jquery,
+							name: 'JQuery'
+						},
+						{
+							svg: this.desktop,
+							name: 'Desktop'
+						},
+						{
+							svg: this.mobile,
+							name: 'Mobile'
+						},
+					]
+				},
+				{
+					title: "No One",
+					description: "Сайт для бабла",
+					date: "2021—2022",
+					technologies: [
+						{
+							svg: this.pug,
+							name: 'Pug'
+						},
+						{
+							svg: this.scss,
+							name: 'SCSS'
+						},
+						{
+							svg: this.jquery,
+							name: 'JQuery'
+						},
+						{
+							svg: this.desktop,
+							name: 'Desktop'
+						},
+						{
+							svg: this.mobile,
+							name: 'Mobile'
+						},
+					]
+				},
+				{
+					title: "Студия дизайна Алексея Сушкова",
+					description: "Сайт для бабла",
+					date: "2021—2022",
+					technologies: [
+						{
+							svg: this.html,
+							name: 'HTML'
+						},
+						{
+							svg: this.css,
+							name: 'CSS'
+						},
+					]
+				},
+				{
+					title: 'EAC',
+					description: 'Сайт для бабла',
+					date: '2021',
+					technologies: [
+						{
+							svg: this.react,
+							name: 'React'
+						},
+						{
+							svg: this.ts,
+							name: 'TypeScript'
+						},
+						{
+							svg: this.desktop,
+							name: 'Desktop'
+						},
+					]
+				},
+				{
+					title: 'Omni rating',
+					description: 'Сайт для бабла',
+					date: '2021',
+					technologies: [
+						{
+							svg: this.tilda,
+							name: 'Tilda'
+						},
+					]
+				},
+			],
+
 		};
 	},
 
+	methods: {
+		clickOutside() {
+			console.log('left.popover', this.popover);
+			this.popover = false;
+		},
+		clickInside() {
+			console.log('click right');
+		},
+		add() {
+			this.popover = true;
+			console.log('add', this.html);
+
+			// if (this.popover) {
+			// 	this.html = this.htmlStroke;
+			//
+			// 	console.log('html', this.html);
+			// }
+		},
+		close() {
+			this.popover = false;
+			this.over = false;
+			console.log('close', this.popover);
+		},
+		mouseOver() {
+			console.log('мыш кродётся');
+			this.over = true;
+		},
+		mouseLeave() {
+			console.log('мыш убежала');
+			this.over = false;
+		}
+
+	},
+
+
+
 	mounted() {
-		const left = [
-			{
-				title: 'Сайт Ярослава Туголуковского',
-				description: 'Сайт для души',
-				date: '2021-2022',
-				technologies: [
-					{
-						svg: this.html,
-						name: 'HTML'
-					},
-					{
-						svg: this.scss,
-						name: 'CSS'
-					},
-					{
-						svg: this.jquery,
-						name: 'JQuery'
-					},
-					{
-						svg: this.bootstrap,
-						name: 'Bootstrap'
-					},
-					{
-						svg: this.desktop,
-						name: 'Desktop'
-					},
-					{
-						svg: this.mobile,
-						name: 'Mobile'
-					},
-				]
-			},
-			{
-				title: 'Колорлон',
-				description: 'Сайт для бабла',
-				date: '2021',
-				technologies: [
-					{
-						svg: this.pug,
-						name: 'Pug'
-					},
-					{
-						svg: this.scss,
-						name: 'SCSS'
-					},
-					{
-						svg: this.js,
-						name: 'JavaScript'
-					},
-					{
-						svg: this.desktop,
-						name: 'Desktop'
-					},
-				]
-			},
-			{
-				title: 'Acer',
-				description: 'Сайт для бабла',
-				date: '2021',
-				technologies: [
-					{
-						svg: this.pug,
-						name: 'Pug'
-					},
-					{
-						svg: this.scss,
-						name: 'SCSS'
-					},
-					{
-						svg: this.js,
-						name: 'JavaScript'
-					},
-					{
-						svg: this.desktop,
-						name: 'Desktop'
-					},
-					{
-						svg: this.mobile,
-						name: 'Mobile'
-					},
-				]
-			},
-			{
-				title: 'Madeleine',
-				description: 'Сайт для бабла',
-				date: '2021',
-				technologies: [
-					{
-						svg: this.pug,
-						name: 'Pug'
-					},
-					{
-						svg: this.scss,
-						name: 'SCSS'
-					},
-					{
-						svg: this.jquery,
-						name: 'JQuery'
-					},
-					{
-						svg: this.desktop,
-						name: 'Desktop'
-					},
-					{
-						svg: this.mobile,
-						name: 'Mobile'
-					},
-				]
-			},
-			{
-				title: 'Fonar.tv',
-				description: 'Сайт для бабла',
-				date: '2020-2022',
-				technologies: [
-					{
-						svg: this.html,
-						name: 'HTML'
-					},
-					{
-						svg: this.scss,
-						name: 'SCSS'
-					},
-					{
-						svg: this.desktop,
-						name: 'Desktop'
-					},
-					{
-						svg: this.mobile,
-						name: 'Mobile'
-					},
-				]
-			},
-			{
-				title: 'CRM Sijeko',
-				description: 'Сайт для бабла',
-				date: '2020',
-				technologies: [
-					{
-						svg: this.vue,
-						name: 'Vue'
-					},
-				]
-			},
-		];
+		console.log('this.popover', this.popover === true);
+		if (this.popover) {
+			this.html = this.htmlStroke;
 
-		left.forEach(element => this.leftProjects.push(element));
+			console.log('html', this.html);
+		}
+		console.log(this.html);
+		// const left = [
+		// 	{
+		// 		title: 'Сайт Ярослава Туголуковского',
+		// 		description: 'Сайт для души',
+		// 		date: '2021-2022',
+		// 		technologies: [
+		// 			{
+		// 				svg: this.html,
+		// 				name: 'HTML'
+		// 			},
+		// 			{
+		// 				svg: this.scss,
+		// 				name: 'CSS'
+		// 			},
+		// 			{
+		// 				svg: this.jquery,
+		// 				name: 'JQuery'
+		// 			},
+		// 			{
+		// 				svg: this.bootstrap,
+		// 				name: 'Bootstrap'
+		// 			},
+		// 			{
+		// 				svg: this.desktop,
+		// 				name: 'Desktop'
+		// 			},
+		// 			{
+		// 				svg: this.mobile,
+		// 				name: 'Mobile'
+		// 			},
+		// 		]
+		// 	},
+		// 	{
+		// 		title: 'Колорлон',
+		// 		description: 'Сайт для бабла',
+		// 		date: '2021',
+		// 		technologies: [
+		// 			{
+		// 				svg: this.pug,
+		// 				name: 'Pug'
+		// 			},
+		// 			{
+		// 				svg: this.scss,
+		// 				name: 'SCSS'
+		// 			},
+		// 			{
+		// 				svg: this.js,
+		// 				name: 'JavaScript'
+		// 			},
+		// 			{
+		// 				svg: this.desktop,
+		// 				name: 'Desktop'
+		// 			},
+		// 		]
+		// 	},
+		// 	{
+		// 		title: 'Acer',
+		// 		description: 'Сайт для бабла',
+		// 		date: '2021',
+		// 		technologies: [
+		// 			{
+		// 				svg: this.pug,
+		// 				name: 'Pug'
+		// 			},
+		// 			{
+		// 				svg: this.scss,
+		// 				name: 'SCSS'
+		// 			},
+		// 			{
+		// 				svg: this.js,
+		// 				name: 'JavaScript'
+		// 			},
+		// 			{
+		// 				svg: this.desktop,
+		// 				name: 'Desktop'
+		// 			},
+		// 			{
+		// 				svg: this.mobile,
+		// 				name: 'Mobile'
+		// 			},
+		// 		]
+		// 	},
+		// 	{
+		// 		title: 'Madeleine',
+		// 		description: 'Сайт для бабла',
+		// 		date: '2021',
+		// 		technologies: [
+		// 			{
+		// 				svg: this.pug,
+		// 				name: 'Pug'
+		// 			},
+		// 			{
+		// 				svg: this.scss,
+		// 				name: 'SCSS'
+		// 			},
+		// 			{
+		// 				svg: this.jquery,
+		// 				name: 'JQuery'
+		// 			},
+		// 			{
+		// 				svg: this.desktop,
+		// 				name: 'Desktop'
+		// 			},
+		// 			{
+		// 				svg: this.mobile,
+		// 				name: 'Mobile'
+		// 			},
+		// 		]
+		// 	},
+		// 	{
+		// 		title: 'Fonar.tv',
+		// 		description: 'Сайт для бабла',
+		// 		date: '2020-2022',
+		// 		technologies: [
+		// 			{
+		// 				svg: this.html,
+		// 				name: 'HTML'
+		// 			},
+		// 			{
+		// 				svg: this.scss,
+		// 				name: 'SCSS'
+		// 			},
+		// 			{
+		// 				svg: this.desktop,
+		// 				name: 'Desktop'
+		// 			},
+		// 			{
+		// 				svg: this.mobile,
+		// 				name: 'Mobile'
+		// 			},
+		// 		]
+		// 	},
+		// 	{
+		// 		title: 'CRM Sijeko',
+		// 		description: 'Сайт для бабла',
+		// 		date: '2020',
+		// 		technologies: [
+		// 			{
+		// 				svg: this.vue,
+		// 				name: 'Vue'
+		// 			},
+		// 		]
+		// 	},
+		// ];
 
-		const right = [
-			{
-				title: "1С-Просто",
-				description: "Сайт для бабла",
-				date: "2021—2022",
-				technologies: [
-					{
-						svg: this.html,
-						name: 'HTML'
-					},
-					{
-						svg: this.scss,
-						name: 'CSS'
-					},
-					{
-						svg: this.jquery,
-						name: 'JQuery'
-					},
-					{
-						svg: this.bootstrap,
-						name: 'Bootstrap'
-					},
-					{
-						svg: this.desktop,
-						name: 'Desktop'
-					},
-					{
-						svg: this.mobile,
-						name: 'Mobile'
-					},
-				]
-			},
-			{
-				title: "Ilona Lunden",
-				description: "Сайт для бабла",
-				date: "2021—2022",
-				technologies: [
-					{
-						svg: this.vue,
-						name: 'Vue'
-					},
-					{
-						svg: this.pug,
-						name: 'Pug'
-					},
-					{
-						svg: this.scss,
-						name: 'SCSS'
-					},
-					{
-						svg: this.jquery,
-						name: 'JQuery'
-					},
-					{
-						svg: this.desktop,
-						name: 'Desktop'
-					},
-					{
-						svg: this.mobile,
-						name: 'Mobile'
-					},
-				]
-			},
-			{
-				title: "No One",
-				description: "Сайт для бабла",
-				date: "2021—2022",
-				technologies: [
-					{
-						svg: this.pug,
-						name: 'Pug'
-					},
-					{
-						svg: this.scss,
-						name: 'SCSS'
-					},
-					{
-						svg: this.jquery,
-						name: 'JQuery'
-					},
-					{
-						svg: this.desktop,
-						name: 'Desktop'
-					},
-					{
-						svg: this.mobile,
-						name: 'Mobile'
-					},
-				]
-			},
-			{
-				title: "Студия дизайна Алексея Сушкова",
-				description: "Сайт для бабла",
-				date: "2021—2022",
-				technologies: [
-					{
-						svg: this.html,
-						name: 'HTML'
-					},
-					{
-						svg: this.css,
-						name: 'CSS'
-					},
-				]
-			},
-			{
-				title: 'EAC',
-				description: 'Сайт для бабла',
-				date: '2021',
-				technologies: [
-					{
-						svg: this.react,
-						name: 'React'
-					},
-					{
-						svg: this.ts,
-						name: 'TypeScript'
-					},
-					{
-						svg: this.desktop,
-						name: 'Desktop'
-					},
-				]
-			},
-			{
-				title: 'Omni rating',
-				description: 'Сайт для бабла',
-				date: '2021',
-				technologies: [
-					{
-						svg: this.tilda,
-						name: 'Tilda'
-					},
-				]
-			},
 
-		];
+		// this.left.forEach(element => this.leftProjects.push(element));
 
-		right.forEach(element => this.rightProjects.push(element));
+		// const right = [
+		// 	{
+		// 		title: "1С-Просто",
+		// 		description: "Сайт для бабла",
+		// 		date: "2021—2022",
+		// 		technologies: [
+		// 			{
+		// 				svg: this.html,
+		// 				name: 'HTML'
+		// 			},
+		// 			{
+		// 				svg: this.scss,
+		// 				name: 'CSS'
+		// 			},
+		// 			{
+		// 				svg: this.jquery,
+		// 				name: 'JQuery'
+		// 			},
+		// 			{
+		// 				svg: this.bootstrap,
+		// 				name: 'Bootstrap'
+		// 			},
+		// 			{
+		// 				svg: this.desktop,
+		// 				name: 'Desktop'
+		// 			},
+		// 			{
+		// 				svg: this.mobile,
+		// 				name: 'Mobile'
+		// 			},
+		// 		]
+		// 	},
+		// 	{
+		// 		title: "Ilona Lunden",
+		// 		description: "Сайт для бабла",
+		// 		date: "2021—2022",
+		// 		technologies: [
+		// 			{
+		// 				svg: this.vue,
+		// 				name: 'Vue'
+		// 			},
+		// 			{
+		// 				svg: this.pug,
+		// 				name: 'Pug'
+		// 			},
+		// 			{
+		// 				svg: this.scss,
+		// 				name: 'SCSS'
+		// 			},
+		// 			{
+		// 				svg: this.jquery,
+		// 				name: 'JQuery'
+		// 			},
+		// 			{
+		// 				svg: this.desktop,
+		// 				name: 'Desktop'
+		// 			},
+		// 			{
+		// 				svg: this.mobile,
+		// 				name: 'Mobile'
+		// 			},
+		// 		]
+		// 	},
+		// 	{
+		// 		title: "No One",
+		// 		description: "Сайт для бабла",
+		// 		date: "2021—2022",
+		// 		technologies: [
+		// 			{
+		// 				svg: this.pug,
+		// 				name: 'Pug'
+		// 			},
+		// 			{
+		// 				svg: this.scss,
+		// 				name: 'SCSS'
+		// 			},
+		// 			{
+		// 				svg: this.jquery,
+		// 				name: 'JQuery'
+		// 			},
+		// 			{
+		// 				svg: this.desktop,
+		// 				name: 'Desktop'
+		// 			},
+		// 			{
+		// 				svg: this.mobile,
+		// 				name: 'Mobile'
+		// 			},
+		// 		]
+		// 	},
+		// 	{
+		// 		title: "Студия дизайна Алексея Сушкова",
+		// 		description: "Сайт для бабла",
+		// 		date: "2021—2022",
+		// 		technologies: [
+		// 			{
+		// 				svg: this.html,
+		// 				name: 'HTML'
+		// 			},
+		// 			{
+		// 				svg: this.css,
+		// 				name: 'CSS'
+		// 			},
+		// 		]
+		// 	},
+		// 	{
+		// 		title: 'EAC',
+		// 		description: 'Сайт для бабла',
+		// 		date: '2021',
+		// 		technologies: [
+		// 			{
+		// 				svg: this.react,
+		// 				name: 'React'
+		// 			},
+		// 			{
+		// 				svg: this.ts,
+		// 				name: 'TypeScript'
+		// 			},
+		// 			{
+		// 				svg: this.desktop,
+		// 				name: 'Desktop'
+		// 			},
+		// 		]
+		// 	},
+		// 	{
+		// 		title: 'Omni rating',
+		// 		description: 'Сайт для бабла',
+		// 		date: '2021',
+		// 		technologies: [
+		// 			{
+		// 				svg: this.tilda,
+		// 				name: 'Tilda'
+		// 			},
+		// 		]
+		// 	},
+		// ];
+
+		// this.right.forEach(element => this.rightProjects.push(element));
 	}
 };
 
